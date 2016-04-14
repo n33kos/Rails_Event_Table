@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
   root 'events#index'
-  get 'events(/:date)(/:sort)' => 'events#bydate'
+  get '(/:date)(/:sort)' => 'events#bydate'
+  post 'events(.:format)' => 'events#create'
 end

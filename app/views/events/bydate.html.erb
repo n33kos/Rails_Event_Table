@@ -1,3 +1,10 @@
 <h1>Events#bydate</h1>
 <p>Find me in app/views/events/bydate.html.erb</p>
-<%= @output %>
+<% @events.each do |event| %>
+	<%= event.id %>
+	<%= event.start %>
+	<%= event.finish %>
+	<%= event.name %>
+	<%= event.track %>
+	<br>
+<% end %>
