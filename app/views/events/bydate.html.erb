@@ -1,10 +1,64 @@
-<h1>Events#bydate</h1>
-<p>Find me in app/views/events/bydate.html.erb</p>
-<% @events.each do |event| %>
-	<%= event.id %>
-	<%= event.start %>
-	<%= event.finish %>
-	<%= event.name %>
-	<%= event.track %>
-	<br>
-<% end %>
+<h1>Events For <%= params[:date] %></h1>
+<div>
+	<label>Select Date</option>
+	<select id="dateChanger" data-current-date="<%= params[:date] %>">
+		<option>All</option>
+		<% @dates.each do |date| %>
+			<option value="<%= date %>"><%= date %></option>
+		<% end %>
+	</select>
+</div>
+<div>
+	<label>Select Sort Method</label>
+	<select id="sortChanger">
+		<option>Default</option>
+		<option value="alpha">A - Z</option>
+		<option value="alphadesc">Z - A</option>
+	</select>
+</div>
+<table>
+	<thead>
+		<tr>
+			<td></td>
+			<% @tracks.each do |track| %>
+				<% if !@global_events.include? track and !@excluded_tracks.any? { |word| track.include?(word) } %>
+					<td><%= track %></td>
+				<% end %>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<% @events.each do |event| %>
+			<tr>
+				<td>
+					<%= event.start.strftime("%I:%M%p") %>&nbsp;-&nbsp;<%= event.finish.strftime("%I:%M%p") %>
+				</td>
+				<% @tracks.each do |track| %>
+					<% if !@global_events.include? track and !@excluded_tracks.any? { |word| track.include?(word) } %>
+						<% if event.track == track or @global_events.any? { |word| event.name.include?(word) } %>
+							<td><%= event.name %></td>
+						<% else %>
+							<td>-</td>
+						<% end %>
+					<% end %>
+				<% end %>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		
+		$('#dateChanger').change(function(){
+			value = $(this).val();
+			window.location.replace("/"+value);
+		});
+		
+		$('#sortChanger').change(function(){
+			date = $('#dateChanger').data('current-date');
+			value = $(this).val();
+			window.location.replace("/"+date+"/"+value);
+		});
+
+	});
+</script>
