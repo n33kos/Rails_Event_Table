@@ -4,16 +4,16 @@
 	<select id="dateChanger" data-current-date="<%= params[:date] %>">
 		<option>All</option>
 		<% @dates.each do |date| %>
-			<option value="<%= date %>"><%= date %></option>
+			<option value="<%= date %>" <% if params[:date].to_s == date.to_s %> selected<%end%>><%= date %></option>
 		<% end %>
 	</select>
 </div>
 <div>
 	<label>Select Sort Method</label>
-	<select id="sortChanger">
+	<select id="sortChanger" data-current-sort="<%= params[:sort] %>">
 		<option>Default</option>
-		<option value="alpha">A - Z</option>
-		<option value="alphadesc">Z - A</option>
+		<option value="alpha" <% if params[:sort].to_s == "alpha" %> selected<%end%>>A - Z</option>
+		<option value="alphadesc" <% if params[:sort].to_s == "alphadesc" %> selected<%end%>>Z - A</option>
 	</select>
 </div>
 <table>
@@ -50,8 +50,13 @@
 	jQuery(document).ready(function($){
 		
 		$('#dateChanger').change(function(){
+			sort = $('#sortChanger').data('current-sort');
 			value = $(this).val();
-			window.location.replace("/"+value);
+			if(value == "All"){
+				window.location.replace("/");	
+			}else{
+				window.location.replace("/"+value+'/'+sort);
+			}
 		});
 		
 		$('#sortChanger').change(function(){
